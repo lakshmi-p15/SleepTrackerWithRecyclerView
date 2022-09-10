@@ -70,8 +70,14 @@ class SleepTrackerFragment : Fragment() {
         //Add a gridlayoutmanager to display items in recyclerview
         // Work with UI designer to select span count
         val manager = GridLayoutManager(activity,3)
-        binding.sleepList.layoutManager = manager
 
+        binding.sleepList.layoutManager = manager
+        manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int) =  when (position) {
+                0 -> 3
+                else -> 1
+            }
+        }
 
         // set an adapter to display sleeplist data in recyclerview
         val adapter = SleepNightAdapter(SleepNightAdapter.SleepNightListener {
@@ -81,7 +87,7 @@ class SleepTrackerFragment : Fragment() {
 
         sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.submitList(it)
+                adapter.addHeaderAndSubmitList(it)
             }
         })
 
