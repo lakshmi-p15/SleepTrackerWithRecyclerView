@@ -1,6 +1,6 @@
 # SleepQualityTracker app with RecyclerView
 
-Its improved version of my previous SleepQualityTrackerapp. This app display a list of results in a RecyclerView instead of a static ScrollView. Introduced design patterns to make it more efficient so it will be easier to maintain and test.
+It is an improved version of my previous SleepQualityTrackerapp. This app display a list of results in a RecyclerView instead of a static ScrollView. Introduced design patterns to make it more efficient so it will be easier to maintain and test.
 
 ## Screenshots
 
