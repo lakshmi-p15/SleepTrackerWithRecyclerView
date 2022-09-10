@@ -20,11 +20,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.database.SleepDatabase
 import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerBinding
@@ -51,19 +53,30 @@ class SleepTrackerFragment : Fragment() {
 
         val application = requireNotNull(this.activity).application
 
+        //create an instance of viewModelFactory
         val dataSource = SleepDatabase.getInstance(application).sleepDatabaseDao
-
         val viewModelFactory = SleepTrackerViewModelFactory(dataSource, application)
 
+        //get a reference to ViewModel associated with this fragment
         val sleepTrackerViewModel =
                 ViewModelProvider(
                         this, viewModelFactory).get(SleepTrackerViewModel::class.java)
 
+        //let the bing object know about ViewModel
         binding.sleepTrackerViewModel = sleepTrackerViewModel
 
         binding.lifecycleOwner = this
 
-        val adapter = SleepNightAdapter()
+        //Add a gridlayoutmanager to display items in recyclerview
+        // Work with UI designer to select span count
+        val manager = GridLayoutManager(activity,3)
+        binding.sleepList.layoutManager = manager
+
+
+        // set an adapter to display sleeplist data in recyclerview
+        val adapter = SleepNightAdapter(SleepNightAdapter.SleepNightListener {
+            nightId -> Toast.makeText(context, "${nightId}", Toast.LENGTH_SHORT).show()
+        })
         binding.sleepList.adapter = adapter
 
         sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
